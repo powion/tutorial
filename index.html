@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- modul style.css, COSMETICS GOES HERE -->
+<style>
+
+body {
+  padding-top: 50px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  background-color: #91a3b0;
+}
+
+header {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: center;
+  margin: auto;
+  position: relative;
+  background-color: white;
+  width: 960px;
+}
+
+.text {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 700px;
+  background-color: white;
+  padding: 50px;
+  padding-top: 70px;
+  border:5px inset #a3a3c2;
+}
+
+.questions {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-left: 700px;
+  height: 500;
+  position: relative;
+}
+
+.trail {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-left: 50px;
+  width: 700px;
+  position: relative;
+  float: left;
+  padding-bottom: 150px;
+}
+
+.codecontainer {
+  text-align: center
+}
+
+pre {
+    font-family: "Courier 10 Pitch", Courier, monospace;
+    font-size: 95%;
+    line-height: 140%;
+    white-space: pre;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    width: 70%;
+    text-align: left;
+    display: inline-block;
+}
+
+code {
+  font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+  font-size: 95%;
+  line-height: 140%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  background: black;
+  color: white;
+}
+
+#content code {
+        display: block;
+        padding: 0.5em 1em;
+        border: 1px solid #bebab0;
+    }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+</style>
+
+<!-- modul index.html, VISUAL ELEMENTS GOES HERE -->
+<div class="bc">
+    <body>
+
+      <div class="text">
+        <h1 align=center>Git Adventure</h1>
+
+Welcome to the git adventure! It is time for you to embark on your journey through the many wonders of git.<br>
+
+This tutorial assumes you have set up git and tried to commit and push a couple of times. If you haven't, check out another tutorial link. <br>
+During the course of this adventure you will create a small, rather useless python program. You don't need any previous python experience to follow it, in fact this will teach you some basic python.
+<br><br>
+Let's start!
+
+<h2> Getting started </h2>
+<div class="codecontainer"><pre><code class="python">def func():
+    pass
+</code></pre></div>
+
+You and friend make a method each
+Same header even?
+Resolve merge conflict, add another method, do a fixup.
+
+Fixup best in scenario where we wanted multiple savepoints.
+
+Ok, phew, everything is in order now. But, how many commits did that turn into? Type git log origin.. to look at all the commits you haven't pushed yet. Three of them for this change? That's a bit much. Let's do something called a squash or fixup.
+
+git rebase -i opens the interactive rebase. Here we can do a bunch of things to our commits, as described. Feel free to investigate the other options on your own, but we will discuss squash and fixup. They both do basically the same thing, merging two or more commits into one. When you write squash or fixup by a commit, it will be merged into the closest commit with pick above it. The difference between them is
+Squash keeps the commit messages and displays all squashed commit messages along with the picked one, letting you choose what to keep. Fixup discards the commit message, letting you
+
+
+      </div>
+    </body>
+
+
+<!-- modul script.js -->
+<link rel="stylesheet" href="./styles/monokai-sublime.css">
+<script src="highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
