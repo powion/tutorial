@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Git Gud Git Guide by powion</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Git Gud Git Guide</h1>
+          <h2>Intermediate level interactive git tutorial</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/powion/tutorial/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/powion/tutorial/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/powion/tutorial" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>Welcome to the git adventure! It is time for you to embark on your journey through the many wonders of git.</p>
+
+<p>This tutorial assumes you have set up git and tried to commit and push a couple of times. If you haven't, check out another tutorial link.
+During the course of this adventure you will create a small, rather useless python program. You don't need any previous python experience to follow, in fact this might even teach you some basic (probably bad) python.</p>
+
+<p>I try to keep the level of explanations very low, since I think the reason a lot of people don't use many of git's functions is that they're all hidden under a page of backstory in tutorials or documentation. Thus, this tutorial mostly explains how, not why. I'd recommend going though this tutorial for a good overview of what can be done, and then reading up on the more confusing things after. </p>
+
+<p>Let's start!</p>
+
+<h3>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting started</h3>
+
+<p>Start by setting up a repo and cloning it to your computer. I called mine <code>favorites</code>. Once you have it set up, begin by creating a python file called <code>main.py</code>, with the following content:</p>
+
+<pre><code>def print_favorites():
+   print('Hello world!')
+</code></pre>
+
+<p>Now that we've created the file, we should commit it. Let's take a look at the status of the repo using <code>git status</code>.</p>
+
+<p>Our new file is under "Untracked files". This basically means that the repo doesn't know and doesn't care about this file at the moment. To start tracking the file, we type <code>git add main.py</code>.</p>
+
+<p><code>main.py</code> is now ready to be commited! When commiting, I like to use the flag <code>-m</code> to write a commit message directly on the command line. So I would write</p>
+
+<pre><code>git commit -m "Add main.py with a print function"
+</code></pre>
+
+<p>This is nice if you want to write short messages for small changes, maybe in your private repo. It will be very useful during this tutorial. Otherwise, a good convention is writing multiple-lined commit messages, where the first line stands on its own and the following lines expand on the contents of the commit. Always remember to write descriptive commit messages! I may or may not follow that advice during this tutorial.</p>
+
+<p>Our changes are now saved, but only locally. To send the commit to GitHub, making it backed up and available anywhere, we use git push.</p>
+
+<p>We added a function, but we're not calling it yet. Add a call to <code>print_favorites</code>:</p>
+
+<pre><code>def print_favorites():
+  print('Hello world!')
+
+print_favorites()
+</code></pre>
+
+<p>You can now run this using <code>python main.py</code> (if you happen to have Python3, otherwise it's not really important.)</p>
+
+<h1>
+<a id="git-diff" class="anchor" href="#git-diff" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>git diff</h1>
+
+<p>An important thing to do before commiting, especially if you're using the -m flag to immediately write your message, is to check what's being commited. With <code>git status</code> you can check what files are being commited, but to see what lines of code are being commited you can use <code>git diff</code>. Try that now and make sure you are only commiting the new funticon call.</p>
+
+<pre><code>&gt; git diff
+</code></pre>
+
+<p>Check <code>git status</code>. This time <code>main.py</code> is not under "untracked files" but under "tracked files not staged for commit". We could do <code>git add</code> again to stage it, but for files in this category it's enough to add the <code>-a</code> flag to the commit command to have them all staged and commited. </p>
+
+<pre><code>git commit -a -m "Add call to print_favorites"
+</code></pre>
+
+<p>Mutliple flags can be combined, so an equvialent command is</p>
+
+<pre><code>git commit -am "Add call to print_favorites"
+</code></pre>
+
+<p>Those are the basics! Do <code>git push</code> and continue on.</p>
+
+<h3>
+<a id="collaborating-and-conflicting" class="anchor" href="#collaborating-and-conflicting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collaborating and conflicting</h3>
+
+<h2>
+<a id="merges" class="anchor" href="#merges" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Merges</h2>
+
+<p>Time for some more serious business. We're going to stage some situations that happen as you collaborate, and practice dealing with them.</p>
+
+<p>Let's expand <code>main.py</code> by adding some of your favorite things! I'll be writing mine in the examples but feel free to write whatever you want. Just don't go off the trail since we are doing this to stage some git situations. First, add your favorite animal. </p>
+
+<pre><code>animal = 'cat'
+
+def print_favorites():
+  print('Hello world!')
+
+print_favorites()
+</code></pre>
+
+<p>Check the diff, commit and push.</p>
+
+<h1>
+<a id="introducing-the-npc" class="anchor" href="#introducing-the-npc" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introducing the NPC</h1>
+
+<p>Actually, this would be easier with some help. Your childhood friend Isabelle knows everything about you so she can add things too. We're gonna pretend to be Isabelle now, by cloning the repo again in a different folder. Do that now.</p>
+
+<pre><code>&gt; cd ../isabelle (create a folder somewhere outside the repo)
+isabelle &gt; git clone [your repo]
+</code></pre>
+
+<p>She adds your favorite movie, commits and pushes.</p>
+
+<pre><code>animal = 'cat'
+movie = 'fight club'
+
+def print_favorites():
+...
+</code></pre>
+
+<pre><code>isabelle &gt; git commit -am "Add favorite movie"
+isabelle &gt; git push
+</code></pre>
+
+<p>Meanwhile, you start adding some printing functionality.</p>
+
+<pre><code>animal = 'cat'
+
+def hello()
+
+def print_favorites():
+  print('Hello world!')
+  print('My favorite animal is', animal)
+...
+</code></pre>
+
+<p>Now, commit and try to push. What happens? You can't, since there are new changes in the remote repository. You will need to pull those changes first, using git pull.</p>
+
+<pre><code>&gt; git pull
+</code></pre>
+
+<p>Oops, what's this? Suddenly your editor pops up.</p>
+
+<p>You and Isabelle have both made changes in the same file, which can make git a little confused. In this case however, the changes are in different parts of the file, so git can automatically figure out what the file should look like. It does however need to make a new commit for these changes, which is why it is now promptiong you for a merge commit message. You don't really need to write anything since there is a preset commit message, so just save and exit. Some people even set their clients to automatically create the merge commit in these situations.</p>
+
+<p>Now the merge is done, and a new commit has been created. Go ahead and push.
+This beautiful MS Paint image shows what happened:</p>
+
+<p><img src="http://puu.sh/oEJyG/c9c44342f6.png" alt="Merging"></p>
+
+<p>Both the print and the movie commits were based off the animal commit, then a merge commit was created where both changes are present. </p>
+
+<p>So that's fine and dandy and represents the reality of the situation. But it sort of... doesn't look too clean, and all these merge commits eventually start cluttering up the commit history. What if we could, instead of having two commits based off the animal commit, pretend like our print commit was based off the movie commit? Then we would get a clean sequence like this:</p>
+
+<p><img src="http://puu.sh/oEJDc/048946710c.png" alt="Rebasing"></p>
+
+<h1>
+<a id="rebasing" class="anchor" href="#rebasing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rebasing</h1>
+
+<p>This can be done using rebasing. Many people always do a rebase when they pull down new changes. Let's get ourselves into the same situation again to try it out. Do <code>git pull</code> in Isabelle's repo. Isabelle adds your favorite book, commits and pushes:</p>
+
+<pre><code>book = 'en annan gryning'
+</code></pre>
+
+<pre><code>isabelle &gt; git commit -am "Add favorite book" 
+isabelle &gt; git push
+</code></pre>
+
+<p>And you add a print for the movie:</p>
+
+<pre><code>print('My favorite movie is', movie)
+</code></pre>
+
+<p>After commiting, instead of <code>git pull</code>, let's write <code>git pull --rebase</code>.</p>
+
+<pre><code>&gt; git pull --rebase
+</code></pre>
+
+<p>Now we have the situation in the image above, and a much cleaner log! Happy times. </p>
+
+<h2>
+<a id="rainy-day-scenarios" class="anchor" href="#rainy-day-scenarios" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rainy day scenarios</h2>
+
+<p>The above were some very nice and friendly situations. Sometimes, git won't be able to figure out how to consolidate different changes in the same file. Let's try a scenario like that! </p>
+
+<p>(Remember to pull in Isabelles repo!)
+Isabelle is still adding things, she just added your favorite food, commited and pushed:</p>
+
+<pre><code>food = 'pizza'
+</code></pre>
+
+<pre><code>isabelle &gt; git commit -am "Add favorite food" 
+isabelle &gt; git push
+</code></pre>
+
+<p>Meanwhile, you add your favorite programming language:</p>
+
+<pre><code>language = 'c++'
+</code></pre>
+
+<p>The changes were made to the same line in the code, so this should cause a conflict. Let's try an ordinary pull first.</p>
+
+<pre><code>&gt; git commit -am "Add favorite programming language"
+&gt; git pull
+</code></pre>
+
+<p>Oh no, it's a merge conflict! Time to panic!!! Or not. This isn't really scary at all. Let's take a look at what happened to the file.</p>
+
+<pre><code>animal = 'cat'
+movie = 'fight club'
+book = 'en annan gryning'
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+language = 'c++'
+=======
+food = 'pizza'
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; e330d67ec9a9f1200117e0cdbfc8d2de05371e3a
+</code></pre>
+
+<p>The conflicting parts are marked out with &lt;&lt;&lt;&lt;&lt;&lt;'s and ======='s. You can see what it looked like before, what your change is, and what the other person(s) changes are. Now it's up to you to decide what to keep and what to discard. In our case, we just keep both lines.</p>
+
+<pre><code>animal = 'cat'
+movie = 'fight club'
+book = 'en annan gryning'
+language = 'c++'
+food = 'pizza'
+</code></pre>
+
+<p>There we go! Now we have to commit this.</p>
+
+<pre><code>&gt; git commit -am "Merge"
+</code></pre>
+
+<p>That's how you deal with a merge conflict. You may find yourself in tricker situations when more lines of code are involved. Never panic though, just look through all the conflicts, and perhaps reach out to the person who made the conflicting changes if something is unclear.</p>
+
+<p>You can also simplify merging using mergetools, but that's for another guide. Google it!</p>
+
+<h1>
+<a id="rebasing-again" class="anchor" href="#rebasing-again" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rebasing again</h1>
+
+<p>Since I introduced rebasing, we should take a look at what happens when you get a merge conflict during a rebase. The process is almost the same but the instructions from the client can look a little confusing.</p>
+
+<p>Recreate a similar scenario by adding new print statements in both Isabelle's and your repo. </p>
+
+<pre><code>isabelle &gt; git pull
+isabelle &gt; (add print for book)
+isabelle &gt; git commit -am "Print favorite book" 
+isabelle &gt; git push
+</code></pre>
+
+<pre><code>&gt; (add print for language)
+&gt; git commit -am "Print favorite programming language"
+</code></pre>
+
+<p>Now do </p>
+
+<pre><code>&gt; git pull --rebase
+</code></pre>
+
+<p>This message looks way scarier than the ordinary merge conflict message. Note that it tells us to do <code>git rebase --continue</code> when we've resolved the conflict. Resolve it by keeping both changes and save the file. Now try this command. </p>
+
+<pre><code>&gt; git rebase --continue
+</code></pre>
+
+<p>Git tells us that we need to do an add first. Do that.</p>
+
+<pre><code>&gt; git add main.py
+&gt; git rebase --continue
+</code></pre>
+
+<p>And there we go, ready to push! </p>
+
+<p>That's about as scary as things normally get when collaborating with others. Grab a friend and start a project, or go help out with an open source one!</p>
+
+<h3>
+<a id="doing-many-things-at-once---branching-and-stashing" class="anchor" href="#doing-many-things-at-once---branching-and-stashing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Doing many things at once - branching and stashing</h3>
+
+<h2>
+<a id="stashing" class="anchor" href="#stashing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Stashing</h2>
+
+<p>You've started working on something new: a list with your favorite games. You're about halfway done, not ready to commit yet.</p>
+
+<pre><code>games = ['pikmin', 'zelda ocarina of']
+</code></pre>
+
+<p>Suddenly, Isabelle pings you, saying there is still a print statement missing (for the favorite food) and it's really blocking her work, so you should fix it asap. And you're in the middle of your game list, you're not ready to commit it yet... What to do...</p>
+
+<p>New command - git stash!</p>
+
+<pre><code>&gt; git stash
+</code></pre>
+
+<p>This takes all your uncommited changes and temporarily hides them in your 'stash'. You now have a clean working directory, and can easily add the print statement, commit and push. Do this. Check with <code>git diff</code> that you have the right changes before and after stashing.</p>
+
+<p>Now that everything is fixed, use <code>git stash apply</code> to go back to where you were.</p>
+
+<pre><code>&gt; git stash apply
+</code></pre>
+
+<p>Now, finish up the list, commit and push!</p>
+
+<pre><code>games = ['pikmin', 'zelda ocarina of time', 'starcraft 2']
+</code></pre>
+
+<h2>
+<a id="branching" class="anchor" href="#branching" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Branching</h2>
+
+<p>Sometimes you will make changes that are so large that you want to be able to work on it and make a few commits before actually letting those changes appear in the main project, for example if you're adding a large new feature. Then you may need something called a branch. This gives you something like a copy of the repo, where you can work without disturbing the "master branch", which is where we've been working so far.</p>
+
+<p>You switch between branches using <code>git checkout [branchname]</code>, and to create a new branch, you can add the flag <code>-b</code>. It's time for a large refactoring of the favorites program, so let's create a branch for it.</p>
+
+<pre><code>&gt; git checkout -b dictionary
+</code></pre>
+
+<p>Switching to a new branch can be done at any point before a commit, the unsaved changes don't really belong anywhere until then. So if you start out on something on the master branch and realize midway through that it should have its own branch, just switch before commiting. </p>
+
+<p>Our big change is putting all these odd variables we have into a dictionary, a Python structure kind of like a map in Java. First we create the dictionary, replacing the variables:</p>
+
+<pre><code>favorites = {
+    'animal' : 'cat',
+    'movie' : 'fight club',
+    'book' : 'en annan gryning',
+    'language' : 'c++',
+    'food' : 'pizza'
+}
+</code></pre>
+
+<p>Commit this, just like you normally would. Try switching back to the master branch using <code>git checkout master</code> to see that the changes can't be found there. Switch back using <code>git checkout dictionary</code>.
+Since we have healthy amounts of paranoia, we want to push this in case our laptop gets stolen on the way home. We can push half-finished work since it's on a branch. </p>
+
+<p>To push a branch, we need a little bit of extra magic. Try a <code>git push</code> and the client will tell you what to do, namely</p>
+
+<pre><code>&gt; git push --set-upstream origin dictionary
+</code></pre>
+
+<p>This will set the upstream to "origin", which is where the master branch pushes to (GitHub). From now on we can just push and pull normally on this branch. </p>
+
+<p>Pulling down a new branch also needs an incantation. We want Isabelle to rewrite the print function in a smart way, since she knows everything about dictionaries. She will first need to do git pull, or a git fetch, to get the information about the new branch. Git fetch does only the first part of git pull, getting the information from upstream without trying to merge anything. This could be useful if you don't want to touch the master branch at that moment. Now, to pull the branch, she basically needs to create her own branch that tracks the remote branch, which is why the command needed looks a bit complicated. Just copypaste to try it out!</p>
+
+<pre><code>isabelle &gt; git fetch
+isabelle &gt; git checkout -b dictionary origin/dictionary
+</code></pre>
+
+<p>This creates a new branch in her local repository, with the same name as the remote branch. YOu could name it to whatever you want, this is just for convenience.</p>
+
+<p>Isabelle rewrites the print method to make use of the dictionary.</p>
+
+<pre><code>def print_favorites():
+  for key, item in favorites.items():
+    print('My favorite {} is {}.'.format(key, item))
+
+print_favorites()
+</code></pre>
+
+<p>She commits this, like a normal commit. She can also push it without issues since the upstream was already set. </p>
+
+<p>Now you can pull this branch, using git pull while having the branch checked out. This change is ready to go into production! We now want to merge it into the master branch.</p>
+
+<p>Check out the master branch.</p>
+
+<pre><code>&gt; git checkout master
+
+</code></pre>
+
+<p>To start merging, do </p>
+
+<pre><code>&gt; git merge dictionary
+</code></pre>
+
+<p>Merge conflicts when merging a branch are fixed in the standard way, resolve the conflicts and commit the results. You can also add the --rebase option here to rebase instead of merging. I'm going to leave this as an exercise for the reader. </p>
+
+<p>You can now go ahead and push! </p>
+
+<h1>
+<a id="cleaning-up" class="anchor" href="#cleaning-up" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cleaning up</h1>
+
+<p>It can be a good idea to delete the branch, so you don't start stacking them up. This is slightly involved, you need to delete the remote branch once, then the "tracking branches" for everyone that was tracking it (you and Isabelle) and finally the local branches for everyone that had them. In that order, the commands are</p>
+
+<pre><code>git push origin --delete dictionary
+git fetch -p
+git branch -d dictionary
+</code></pre>
+
+<p>Deleting the local branches is not super important, you will probably not notice them being around. This concludes branches!</p>
+
+<h3>
+<a id="fixing-oopsies-and-cleaning-up-the-log" class="anchor" href="#fixing-oopsies-and-cleaning-up-the-log" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fixing oopsies and cleaning up the log</h3>
+
+<h2>
+<a id="amend" class="anchor" href="#amend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Amend</h2>
+
+<p>Sometimes you commit something and more or less instantly regret it. It could be because of a typo in the commit message or the you forgot to remove some debugging prints. In those cases, our best friend is <code>amend</code>.</p>
+
+<p>You add a nice welcome message to your program.</p>
+
+<pre><code>def print_favorites():
+    print('Welcome to my favorites!')
+    ...
+</code></pre>
+
+<p>You commit using</p>
+
+<pre><code>&gt; git commit -am "Add welcom message"
+</code></pre>
+
+<p>Oh no, that's a typo. No fear, do</p>
+
+<pre><code>&gt; git commit --amend
+</code></pre>
+
+<p>and you editor will open, allowing you to change your message. </p>
+
+<p>You decide to try running the program, </p>
+
+<pre><code>python main.py
+</code></pre>
+
+<p>and realize it would be much nicer if there was an empty line after the welcome message. That should just be added to the commit we had. Make the change, adding an empty <code>print()</code> statement. Add this to the commit using </p>
+
+<pre><code>&gt; git commit -a --amend --no-edit
+</code></pre>
+
+<p>which lets you skip editing the commit message. Note the <code>-a</code> flag, you need to remember to stage your changes for commit. </p>
+
+<p>You can basically do any change, add new files, remove files, change files, and then just do <code>git commit --amend</code> to add that change to the latest commit. However, once you've pushed it, consider it gone. Changing things that have been made public is almost never a good idea, since other people may have started using them already. Go ahead and push this commit. </p>
+
+<h2>
+<a id="reset" class="anchor" href="#reset" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reset</h2>
+
+<p>Sometimes you just don't want the commit anymore. That can mean two things: That you want to keep the changes, just not have them in a commit, or that you want to remove all the changes you made.</p>
+
+<p>To only undo the act of committing, use  </p>
+
+<pre><code>&gt; git reset --soft HEAD~1
+</code></pre>
+
+<p>If you also want to remove all the changes you made, and make it like you just pulled the previous commit, use</p>
+
+<pre><code>&gt; git reset --hard HEAD~1
+</code></pre>
+
+<p>This WILL delete your changes, so only use this if you really want to. In some cases, it's better to reset files one by one to make sure you know what you're resetting. To do this, use</p>
+
+<pre><code>&gt; git checkout --main.py
+</code></pre>
+
+<p>Make some bogus edits in <code>main.py</code> to try these commands out.</p>
+
+<h2>
+<a id="interactive-rebase" class="anchor" href="#interactive-rebase" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Interactive rebase</h2>
+
+<p>Create a new branch called songs, and start adding your favorite tunes. To create a situation, we're going to add one song per commit. Go!</p>
+
+<pre><code>&gt; git checkout -b songs
+&gt; (add dictionary with one song)
+&gt; git commit -am "Add song dictionary with song x"
+&gt; (add dictionary with one song)
+&gt; git commit -am "Add song y"
+...
+</code></pre>
+
+<p>The end result should be something like</p>
+
+<pre><code>songs = { 
+    'the killers' : 'mr brightside',
+    'goldfrapp' : 'rocket',
+    'inka marka' : 'loy loy loy'
+    }
+</code></pre>
+
+<p>When you're done, also add some print statements for the songs in <code>print_favorites</code>. </p>
+
+<pre><code>print('My favorite songs are:')
+for key, item in songs.items():
+  print('{} by {}'.format(key, item))
+</code></pre>
+
+<p>Commit this. If you check <code>git status</code> now, you'll see that we have 4 commits pending. These are all the commits from the branch, and you can see them using <code>git log</code>. Try it.</p>
+
+<pre><code>git log
+</code></pre>
+
+<p>Sometimes you do want the change split up into several commits, and in that case you could just go ahead and push. But sometimes it's cleaner to have just one commit explaining your change, e.g. "Add favorite songs and print them". This can be achieved using interactive rebasing. Do</p>
+
+<pre><code>&gt; git rebase -i 
+
+pick a982c8c Add song dictionary with whats your problem
+pick 4482745 Add rocket
+pick 6575534 Add loy loy loy
+pick 57c845b Print favorite songs
+
+# Rebase 8e77232..0d49872 onto 8e77232
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like "squash", but discard this commit's log message
+#  x, exec = run command (the rest of the line) using shell
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+</code></pre>
+
+<p>We want to merge the commits, so we can use either <code>squash</code> or <code>fixup</code>. <code>squash</code> lets us write a new commit message, while <code>fixup</code> uses the top commit's message. Squashing can be nice if you want to reuse parts of different commit messages. Otherwise, you can use fixup to just use the top one, or combine fixup with reword to edit the top message. Let's go with the latter option.</p>
+
+<pre><code>r a982c8c Add song dictionary with whats your problem
+f 4482745 Add rocket
+f 6575534 Add loy loy loy
+f 57c845b Print favorite songs
+</code></pre>
+
+<p>Set the commit message to something nice like "Add favorite songs and print them". Check <code>git log</code> again. Very cool! NOTE that this should not be done if more people have access to and are using your commits, as in the previous example.</p>
+
+<p>Now you can merge this branch into master and push it.</p>
+
+<pre><code>&gt; git checkout master
+&gt; git merge songs
+&gt; git push
+</code></pre>
+
+<h3>
+<a id="pull-requests-and-forks" class="anchor" href="#pull-requests-and-forks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Pull requests and forks</h3>
+
+<p>Using pull requests is a more involved way of merging a branch with master. If you are working on a larger project that may even be in production, it is a good idea to have your teammates look over your code before you merge it. Also, if you wrote some code for a project that you don't have writing rights to, such as an open source project, you will need to do a pull request and have the owners merge your code. </p>
+
+<p>We'll try both these scenarios. First, there is one very obvious thing missing from our project, printing the games. Create a branch and fix that.</p>
+
+<pre><code>git checkout -b games
+</code></pre>
+
+<pre><code>print('My favorite games are:)
+[print(game) for game in games]
+</code></pre>
+
+<p>Now, hit up your repo on GitHub. Go to your branches, and find the games branch. (This is where the clutter will really show if you neglect deleting branches.) Here, click "Create Pull Request". This will take you to a page where you can see all the changes you're trying to add, and you can write a description of them. Make sure to make this good, or your change might not even be considered! When you're done, click on "Send pull request". The relevant people should be notified, and now you just gotta wait for them to look it over. Isabelle takes a look, tries the program, and notices that it prints a long block of text. "Add some blank lines to make the output more readable", she comments. </p>
+
+<p>It is very important to remember that comments on your code are always a good opportunity to learn. Respect them, learn from them, but don't take them personally. Sure, five-minutes-ago you may have made a mistake, but from-now-on-you sure won't make that one again (at least not this week), and it's all thanks to the feedback you got. </p>
+
+<p>After receiving feedback, you can discuss it in the comments, and also make additional commits. Make a commit adding blank lines in appropriate places. After this, you could make a comment like "I added blank lines, how does it look?" and Isabelle may respond with "Great, go ahead and merge."</p>
+
+<p>When there are not conflicts, you can merge using the big green "Merge pull request" button on GitHub. Otherwise, you can always merge locally and push, and GitHub will notice that the merge is done. Either way should work for us right now so go pick one and do it. Afterwards, GitHub will offer you a nice button to delete the branch. Good job!</p>
+
+<h2>
+<a id="forks" class="anchor" href="#forks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Forks</h2>
+
+<p>Imma write this tonight, then we're done!</p>
+        </section>
+
+        <footer>
+          Git Gud Git Guide is maintained by <a href="https://github.com/powion">powion</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
