@@ -400,7 +400,7 @@ print_favorites()
 
 <p>It can be a good idea to delete the branch, so you don't start stacking them up. This is slightly involved, you need to delete the remote branch once, then the "tracking branches" for everyone that was tracking it (you and Isabelle) and finally the local branches for everyone that had them. In that order, the commands are</p>
 
-<pre><code>&gt; git push origin -d dictionary
+<pre><code>&gt; git push origin --delete dictionary
 &gt; git fetch -p
 &gt; git branch -d dictionary
 </code></pre>
